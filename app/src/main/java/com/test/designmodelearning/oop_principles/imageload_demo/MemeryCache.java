@@ -1,6 +1,7 @@
 package com.test.designmodelearning.oop_principles.imageload_demo;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.LruCache;
 
 /**
@@ -11,7 +12,6 @@ import android.util.LruCache;
 public class MemeryCache implements ImageCache {
 
     private LruCache<String, Bitmap> mLruCache;
-    private MemeryCache mInstance;
 
     public MemeryCache() {
         initLruCache();
@@ -21,7 +21,6 @@ public class MemeryCache implements ImageCache {
      * 初始化lrucache
      */
     private void initLruCache() {
-        mInstance = new MemeryCache();
         //计算可用最大内存
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         //取1/4内存作为缓存
@@ -37,11 +36,14 @@ public class MemeryCache implements ImageCache {
 
     @Override
     public Bitmap get(String url) {
-        return mLruCache.get(url);
+        Bitmap bitmap= mLruCache.get(url);
+        Log.i("M-TAG","MemeryCache get "+bitmap);
+        return bitmap;
     }
 
     @Override
     public void put(String url, Bitmap bitmap) {
         mLruCache.put(url, bitmap);
+        Log.i("M-TAG","MemeryCache put "+bitmap);
     }
 }

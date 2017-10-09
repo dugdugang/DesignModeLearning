@@ -5,8 +5,6 @@ import android.graphics.BitmapFactory;
 
 import java.io.InputStream;
 
-import static android.R.attr.path;
-
 /**
  * Author: duguang
  * Date 2017/9/29 0029.
@@ -37,6 +35,7 @@ public class ImageManager {
         }
         //设置缩放比例
         options.inSampleSize = be;
+        options.inJustDecodeBounds = false;
 
         return BitmapFactory.decodeFile(path, options);
     }
@@ -49,7 +48,7 @@ public class ImageManager {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         options.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+        BitmapFactory.decodeStream(is, null, options);
         int w = options.outWidth;
         int h = options.outHeight;
         int be = 1;//默认不缩放
@@ -63,7 +62,8 @@ public class ImageManager {
         }
         //设置缩放比例
         options.inSampleSize = be;
-
-        return BitmapFactory.decodeStream(is, null, options);
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+        return bitmap;
     }
 }

@@ -1,6 +1,7 @@
 package com.test.designmodelearning.oop_principles.imageload_demo;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +18,7 @@ public class DiskCache implements ImageCache {
     @Override
     public Bitmap get(String url) {
         Bitmap bitmap = ImageManager.ratio(mCacheDir + url);
+        Log.i("M-TAG", "DiskCache get Bitmap " + bitmap);
         return bitmap;
 
     }
@@ -38,5 +40,7 @@ public class DiskCache implements ImageCache {
                 }
             }
         }
+        Log.i("M-TAG", "DiskCache put Bitmap " + get(url));
+
     }
 }

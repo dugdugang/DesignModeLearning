@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -55,21 +56,26 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
             return;
         }
+        Log.i("M-TAG", "111111");
         imageView.setTag(url);
-        mExecutorService.execute(new Runnable() {
+        mExecutorService.submit(new Runnable() {
             @Override
             public void run() {
+                Log.i("M-TAG", "downstart");
                 Bitmap bitmap = loadImage(url);
                 if (bitmap == null) {
                     return;
                 }
+                Log.i("M-TAG", "22222");
                 if (imageView.getTag().equals(url)) {
                     b = bitmap;
                     handler.sendEmptyMessage(0);
                     // imageView.setImageBitmap(bitmap);
+                    Log.i("M-TAG", "3333333");
 
                 }
                 mCache.put(url, bitmap);
+                Log.i("M-TAG", "downover");
             }
         });
     }
@@ -83,16 +89,28 @@ public class ImageLoader {
      */
     private Bitmap loadImage(String imageUrl) {
         Bitmap bitmap = null;
+        Log.i("M-TAG", "loadImage0");
         try {
             URL url = new URL(imageUrl);
+            Log.i("M-TAG", "loadImage1");
+
+
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            bitmap = ImageManager.ratio(connection.getInputStream());
+            Log.i("M-TAG", "loadImage2");
+
+            bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+            Log.i("M-TAG", "loadImage3");
+//            bitmap = ImageManager.ratio(connection.getInputStream());
+            //ImageManager.ratio(connection.getInputStream());
+            connection.disconnect();
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            Log.i("M-TAG", "" + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i("M-TAG", "" + e.toString());
         }
+        Log.i("M-TAG", "" + (bitmap == null));
         return bitmap;
     }
 
